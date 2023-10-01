@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.Extensions.Configuration;
-
 namespace ASPNETLab4.Control.Controllers
 {
     public class LibraryController : Controller
@@ -24,21 +23,16 @@ namespace ASPNETLab4.Control.Controllers
         [HttpGet("Library/Books")]
         public IActionResult ListBooks()
         {
-            // Зчитуємо список книг з файлу конфігурації
             List<string> books = _configuration.GetSection("Books").Get<List<string>>();
             if (books == null)
             {
                 books = new List<string>();
             }
-
-            // Формуємо список книг у текстовому форматі
             var plainText = "List of books:\n";
             foreach (var book in books)
             {
                 plainText += book + "\n";
             }
-
-            // Повертаємо текстовий вміст
             return Content(plainText, "text/plain");
         }
         [HttpGet("Library/Profile/{id?}")]
@@ -48,7 +42,6 @@ public IActionResult UserProfile(int? id)
     {
         var userId = id ?? 0;
         var userConfig = _configuration.GetSection("Profile").GetChildren().FirstOrDefault(u => u.Key == userId.ToString());
-        
         if (userConfig != null)
         {
             string userName = userConfig["Name"];
@@ -65,6 +58,5 @@ public IActionResult UserProfile(int? id)
         return Content("Invalid user ID. Please enter an integer between 0 and 5.");
     }
 }
-
-    }
+}
 }
